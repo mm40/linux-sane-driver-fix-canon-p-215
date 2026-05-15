@@ -10,7 +10,7 @@ This is shown in a screenshot below, with first two pages scanned using `simple-
 
 - This happens only when scanning in duplex mode. Scanners like P-215 are intended for this purpose.
 - This happens in any program, not just `simple-scan`, including the command line utility `scandf`. Changing programs doesn't help, nor any of the settings in the programs.
-- **NOTE!**: set the page size manually in `simple-scan`. Auto-sizing pages doesn't work properly, and that's a separate issue from this.
+- **NOTE**: set the page size manually in `simple-scan`. Auto-sizing pages doesn't work properly, and that's a separate issue from this.
 
 ## Intended solution (that doesn't work)
 To solve this problem, a configuration file `/etc/sane.d/canon_dr.conf` can have a line `option duplex-offset 300` added below ``# P-215`, for Canon P-215 printer. **BUT THIS DOESN'T WORK**.
@@ -27,8 +27,8 @@ So what's the problem? Took me days to figure out, and a single line of code to 
 2. `git clone https://github.com/mm40/linux-sane-driver-fix-canon-p-215.git`
 3. `patch backends/backend/canon_dr.c < linux-sane-driver-fix-canon-p-215/sane-canon-p-215.patch`
 4. `cd backends`
-5. Run `./autogen.sh` until it works. I had to install `autoconf-archive` and `autopoint` for it to work.
-6. Run `./configure`, but if you get the warning that USB support won't be configured, install `libusb-dev` and run `./configure` again. After all, Canon P-215 IS a USB scanner.
+5. Run `./autogen.sh` until it works. I had to install `autoconf-archive` and `autopoint` for it to work
+6. Run `./configure`, but if you get the warning that USB support won't be configured, install `libusb-dev` and run `./configure` again. After all, Canon P-215 IS a USB scanner
 7. `make`
 
 
@@ -40,11 +40,14 @@ The relevant file is whatever the link `backends/backend/.libs/libsane-canon_dr.
 
 Adapt these commands to your own system. For me 
 
-9. `sudo mv /usr/lib/x86_64-linux-gnu/sane/libsane-canon_dr.so.1.2.1 /usr/lib/x86_64-linux-gnu/sane/_libsane-canon_dr.so.1.2.1 # Create Backup`
-10. `sudo cp -L backends/backend/.libs/libsane-canon_dr.so /usr/lib/x86_64-linux-gnu/sane/libsane-canon_dr.so.1.2.1 # Copy newly created`
+9. `sudo mv /usr/lib/x86_64-linux-gnu/sane/libsane-canon_dr.so.1.2.1 /usr/lib/x86_64-linux-gnu/sane/_libsane-canon_dr.so.1.2.1` to create Backup
+10. `sudo cp -L backend/.libs/libsane-canon_dr.so /usr/lib/x86_64-linux-gnu/sane/libsane-canon_dr.so.1.2.1` to copy the newly created, working file, over the original buggy one
+
+11. `sudo apt-mark hold sane`: (optional) do this to prevent the sane package from updating, and overriding your fix. This is only temporary until this fix is mainlined
 </details>
 
 Right after the step 10 above, and adding `option duplex-offset 300` under `# P-215` in file `/etc/sane.d/canon_dr.conf`, scanning should work perfectly. Restart `simple-scan` and see whether it's the case. Adjusting the `300` values is possible now, that will change the amount of horizontal white space removed.
+
 
 ## Result
 
