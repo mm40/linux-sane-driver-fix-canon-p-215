@@ -46,6 +46,13 @@ Adapt these commands to your own system. For me
 
 Right after the step 10 above, and adding `option duplex-offset 300` under `# P-215` in file `/etc/sane.d/canon_dr.conf`, scanning should work perfectly. Restart `simple-scan` and see whether it's the case. Adjusting the `300` values is possible now, that will change the amount of horizontal white space removed.
 
+## Result
+
+No more white horizontal space either above or below.
+
+<img width="1454" height="1074" alt="2026-05-15@23h-05m-10s_1454x1074" src="https://github.com/user-attachments/assets/a15e103a-eba4-409d-9537-7a795b0e2056" />
+
+
 ## Notes
 - Any time you change `/etc/sane.d/canon_dr.conf`, restart `simple-scan`.
 
