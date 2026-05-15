@@ -1,0 +1,17 @@
+# by Mihailo Maletic - github.com/mm40
+
++++ backends/backend/canon_dr.c
+@@ -1664,12 +1664,13 @@ init_model (struct scanner *s)
+   else if (strstr (s->model_name, "P-215")
+    || strstr (s->model_name,"DR-P215")){
+     s->color_interlace[SIDE_FRONT] = COLOR_INTERLACE_rRgGbB;
+     s->color_interlace[SIDE_BACK] = COLOR_INTERLACE_RRGGBB;
+     s->gray_interlace[SIDE_FRONT] = GRAY_INTERLACE_gG;
+     s->duplex_interlace = DUPLEX_INTERLACE_FBfb;
++    s->duplex_offset_side = SIDE_BACK;
+     s->need_ccal = 1;
+     s->invert_tly = 1;
+     s->unknown_byte2 = 0x88;
+     s->rgb_format = 1;
+     s->has_ssm_pay_head_len = 1;
+     s->ppl_mod = 8;
