@@ -1,1 +1,45 @@
-Initial readme
+
+# Canon P-215 scanner driver fix for Linux Sane
+
+## Problem
+When scanning documents with Canon P-215 scanner in duplex mode (both sides of a document), all odd pages, starting from the first one, have a white horizontal gap at the bottom, while all the even pages starting from the second one have the same horizontal white gape, but at the top. 
+
+This is shown in a screenshot below, with first two pages scanned using `simple-scan`. White gaps which shouldn't be there are marked with red circles.
+
+- This happens only when scanning in duplex mode. Scanners like P-215 are intended for this purpose.
+- This happens in any program, not just `simple-scan`, including the command line utility `scandf`. Changing programs doesn't help, nor any of the settings in the programs.
+
+## Intended solution (that doesn't work)
+To solve this problem, a configuration file `/etc/sane.d/canon_dr.conf` can have a line `option duplex-offset 300` added below ``# P-215`, for Canon P-215 printer. **BUT THIS DOESN'T WORK**.
+
+So what's the problem? Took me days to figure out, and a single line of code to fix it. It's the driver itself that's the problem.
+
+## Solution that makes the intended solution work
+
+### Fixing [Sane Backends (Drivers)](http://www.sane-project.org/sane-backends.html)
+
+Quick steps to fix it for yourself (before the patch for the official driver is mainlined):
+
+1. `git clone https://gitlab.com/sane-project/backends.git`
+2. `git clone https://github.com/mm40/linux-sane-driver-fix-canon-p-215.git`
+3. `patch backends/backend/canon_dr.c < linux-sane-driver-fix-canon-p-215/sane-canon-p-215.patch`
+4. `cd backends`
+5. Run `./autogen.sh` until it works. I had to install `autoconf-archive` and `autopoint` for it to work.
+6. Run `./configure`, but if you get the warning that USB support won't be configured, install `libusb-dev` and run `./configure` again. After all, Canon P-215 IS a USB scanner.
+7. `make`
+
+The relevant file is whatever the link `backends/backend/.libs/libsane-canon_dr.so` is pointing to. In my case it's `backends/backend/.libs/libsane-canon_dr.so.1.4.0`. There is a corresponding file on your system that needs to be replaced with it. In case of my distro, it's `/usr/lib/x86_64-linux-gnu/sane/libsane-canon_dr.so.1.2.1`. To find such a file yourself, use `find / -type f -name 'libsane-canon_dr.so.*' 2>/dev/null`.  Replace that file with the newly created `libsane-canon_dr.so.X.Y.Z`:
+
+<details>
+  <summary>Click to see quick and dirty solution which will "just work", but is not recommended</summary>
+  
+Hidden content
+</details>
+
+Without this fix, setting `option duplex-offset 300` under `# P-215` in file `/etc/sane.d/canon_dr.conf` has no effect.
+
+## Notes
+- Any time you change `/etc/sane.d/canon_dr.conf`, restart `simple-scan`.
+
+TODO:
+- [ ] Comment on line 1629 in `canon_dr.c` says "all copied from P-215". Does that mean this patch should be applied to all the printers whose code is "copied from P-215"?
