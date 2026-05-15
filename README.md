@@ -34,7 +34,7 @@ So what's the problem? Took me days to figure out, and a single line of code to 
 
 
 <details>
-  <summary><b>8. Click here to see "dirty" of the "quick and dirty part"</summary>
+  <summary><b>8. Click here to see "dirty" of the "quick and dirty part"</b></summary>
   
 The relevant file is whatever the link `backends/backend/.libs/libsane-canon_dr.so` is pointing to. In my case it's `backends/backend/.libs/libsane-canon_dr.so.1.4.0`. There is a corresponding file on your system that needs to be replaced with it. In case of my distro, it's `/usr/lib/x86_64-linux-gnu/sane/libsane-canon_dr.so.1.2.1`. To find such a file yourself, use `find / -type f -name 'libsane-canon_dr.so.*' 2>/dev/null`.  Replace that file with the newly created `libsane-canon_dr.so.X.Y.Z`:
 
