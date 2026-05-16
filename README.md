@@ -6,7 +6,7 @@ When scanning documents with Canon P-215 scanner in duplex mode (both sides of a
 
 This is shown in a screenshot below, with first two pages scanned using `simple-scan`. White gaps which shouldn't be there are marked with red circles. Page size is set to A4, and the real page size is also A4.
 
-<small>(note: the images were scanned for demonstration purposes only)</small>
+<small><small>(note: the images were scanned for demonstration purposes only)</small></small>
 
 <img width="1454" height="1074" alt="2026-05-15@22h-36m-51s_1454x1074" src="https://github.com/user-attachments/assets/0e012c27-d869-4d09-a384-f472cb8c6917" />
 
