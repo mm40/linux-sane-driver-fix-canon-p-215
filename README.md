@@ -21,7 +21,7 @@ So what's the problem? Took me days to figure out, and a single line of code to 
 
 ### Fixing [Sane Backends (Drivers)](http://www.sane-project.org/sane-backends.html)
 
-### Quick and dirty way to make it work (before the patch for the official driver is mainlined):
+### Quick and dirty way to make it work (before the [patch for the official driver is mainlined](https://gitlab.com/sane-project/backends/-/merge_requests/921)):
 
 1. `git clone https://gitlab.com/sane-project/backends.git`
 2. `git clone https://github.com/mm40/linux-sane-driver-fix-canon-p-215.git`
